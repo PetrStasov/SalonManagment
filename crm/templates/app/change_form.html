@@ -1,0 +1,26 @@
+```html+javascript
+ {% extends "admin/change_form.html" %}
+ {% load static %}
+
+ {% block extrahead %}
+     {{ block.super }}
+     <script>
+         document.getElementById('id_service').addEventListener('change', function() {
+             var serviceId = this.value;
+             var personalSelect = document.getElementById('id_personal');
+
+             fetch('/crm/get-personal-for-service/' + serviceId + '/')
+                 .then(response => response.json())
+                 .then(data => {
+                     personalSelect.innerHTML = '';
+                     data.forEach(person => {
+                         var option = document.createElement('option');
+                         option.value = person.id;
+                         option.text = person.name;
+                         personalSelect.appendChild(option);
+                     });
+                 });
+         });
+     </script>
+ {% endblock %}
+ ```

@@ -1,0 +1,9 @@
+django>=3.2.14
+openpyxl
+python-docx
+requests
+pytz
+django-crispy-forms
+django-environ
+django-extensions
+

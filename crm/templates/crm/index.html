@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись на процедуры - ГУ Борисовский ФОЦ</title>
+    <link rel="stylesheet" href="{% static 'crm/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/css/booking-modal.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/css/flatpickrmin.css' %}">
+</head>
+<body>
+    <!-- Фоновое видео -->
+    <video class="background-video" preload="auto" autoplay="autoplay" loop="loop" muted="" playsinline="playsinline" >
+        <source src="{% static 'crm/video/1.mov' %}" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
+
+    <!-- Затемняющий слой -->
+    <div class="overlay"></div>
+
+    <!-- Холст для частиц -->
+    <canvas id="particles"></canvas>
+
+    <!-- Навигационная панель -->
+    <div class="nav-buttons">
+        <button onclick="scrollToSection('massage')">Массаж</button>
+        <button onclick="scrollToSection('spa')">SPA-процедуры</button>
+        <button onclick="scrollToSection('care')">Уход за кожей</button>
+        <button id="openBookingBtn">Записаться онлайн</button>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="content">
+        <div class="clock" id="clock"></div>
+        <div class="date" id="date"></div>
+
+        <!-- Секции услуг -->
+        <section id="massage" class="section">
+            <h2>Профессиональный массаж</h2>
+            <p>Расслабляющие и лечебные массажные программы от наших специалистов. Мы предлагаем различные виды массажа: классический, спортивный, антицеллюлитный и другие, которые помогут снять напряжение, улучшить кровообращение и общее самочувствие.</p>
+        </section>
+
+        <section id="spa" class="section">
+            <h2>SPA-процедуры</h2>
+            <p>Полный комплекс спа-услуг для вашего отдыха и релаксации. Наши программы включают ароматерапию, обертывания, банные ритуалы и другие процедуры, которые помогут вам восстановить силы, очистить организм и обрести гармонию.</p>
+        </section>
+
+        <section id="care" class="section">
+            <h2>Уход за кожей</h2>
+            <p>Современные методики ухода за кожей лица и тела. Мы используем профессиональную косметику и передовые технологии для проведения чистки лица, пилингов, биоревитализации и других процедур, которые помогут сохранить молодость и здоровье вашей кожи.</p>
+        </section>
+    </div>
+
+    <!-- Модальное окно записи -->
+    <div class="modal-overlay" id="bookingOverlay"></div>
+    <div class="modal" id="bookingModal">
+	<button class="modal-close-btn" id="closeModalBtn"></button>
+        <div id="modalError" class="error-message"></div>
+        
+        <!-- Шаг 1: Ввод телефона -->
+        <div class="modal-step active" data-step="1">
+            <h2>Введите номер телефона</h2>
+            <div class="form-group">
+				<input type="hidden" name="phone" id="phone-raw">
+                <input type="tel" id="phone" placeholder="+375 (__) ___-__-__" pattern="\+375\d{9}" >
+                <div class="error-message" id="phoneError"></div>
+            </div>
+            <input type="hidden" id="clientId">
+            <div class="modal-buttons">
+                <button class="modal-button" id="nextStep1">Далее</button>
+            </div>
+        </div>
+        
+        <!-- Шаг 2: Ввод данных -->
+        <div class="modal-step" data-step="2">
+            <h2>Ваши данные</h2>
+            <div class="form-group">
+                <input type="text" id="fullName" placeholder="Фамилия Имя Отчество">
+                <div class="error-message" id="nameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Дата рождения (необязательно):</label>
+                <input type="date" id="birthDate">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button" id="prevStep2">Назад</button>
+                <button class="modal-button" id="nextStep2">Далее</button>
+            </div>
+        </div>
+        
+        <!-- Шаг 3: Выбор услуги -->
+        <div class="modal-step" data-step="3">
+            <h2>Завершите запись</h2>
+            <div class="form-group">
+                <label for="serviceSelect">Выберите услугу:</label>
+                <select id="serviceSelect">
+                    <option value="">-- Выберите услугу --</option>
+                    {% for service in services %}
+                    <option value="{{ service.id }}" data-duration="{{ service.duration }}">{{ service.title }} ({{ service.duration }} мин)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="specialistSelect">Выберите специалиста:</label>
+                <select id="specialistSelect">
+                    <option value="">-- Сначала выберите услугу --</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="appointmentDate">Выберите дату:</label>
+                <input type="text" id="appointmentDate" class="datepicker" placeholder="Выберите дату" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>Выберите время:</label>
+                <div class="time-slots-container">
+                    <div class="slot-grid" id="timeSlots">
+                        <div class="loading-slots">Выберите специалиста и дату</div>
+                    </div>
+                </div>
+                <input type="hidden" id="appointmentTime">
+            </div>
+            
+            <div class="error-message" id="timeError"></div>
+            <div class="modal-buttons">
+                <button class="modal-button" id="prevStep3">Назад</button>
+                <button class="modal-button" id="bookAppointmentBtn">Записаться</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Глобальные вспомогательные функции
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+    
+    <script src="{% static 'crm/js/particles.js' %}"></script>
+    <script src="{% static 'crm/js/clock.js' %}"></script>
+    <script src="{% static 'crm/js/modal.js' %}"></script>
+    <script src="{% static 'crm/js/api.js' %}"></script>
+    <script src="{% static 'crm/js/form-validator.js' %}"></script>
+    <script src="{% static 'crm/js/time-slots.js' %}"></script>
+    <script src="{% static 'crm/js/main.js' %}"></script>
+	<script src="{% static 'crm/js/flatpickr.js' %}"></script>
+    <script src="{% static 'crm/js/ru.js' %}"></script>
+	<script src="{% static 'crm/js/cleavemin.js' %}"></script>
+	<script src="{% static 'crm/js/phone_input.js' %}"></script>
+</body>
+</html>

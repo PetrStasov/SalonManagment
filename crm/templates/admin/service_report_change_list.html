@@ -1,0 +1,82 @@
+﻿{% extends "admin/change_list.html" %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block content_title %}
+<style>
+    .button-container {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    .button:hover {
+        background-color: #0056b3;
+    }
+    .results {
+        margin-top: 20px;
+    }
+    .results th, .results td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .results th {
+        background-color: #f8f8f8;
+    }
+    .results td:last-child {
+        font-weight: bold;
+    }
+    .totals {
+        background-color: #f1f1f1;
+        font-weight: bold;
+    }
+</style>
+    <h1>Отчет по услугам</h1>
+    <div class="button-container">
+        <a href="{% url 'admin:date_filter' %}" class="button">Экспортировать</a>
+    </div>
+{% endblock %}
+
+{% block result_list %}
+<div class="results">
+    <table>
+        <thead>
+            <tr>
+                <th>Сотрудник</th>
+                {% for service in services %}
+                <th>{{ service }}</th>
+                {% endfor %}
+                <th>Заработано</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in earnings %}
+            <tr>
+                <td>{{ employee.personal__full_name }}</td>
+                {% for service in services %}
+                <td>{{ summary|get_item:service|get_item:employee.personal__full_name|default:"0" }}</td>
+                {% endfor %}
+                <td>{{ employee.total_earnings|default:"0"|intcomma }} руб.</td>
+            </tr>
+            {% endfor %}
+            <tr class="totals">
+                <td>ИТОГО</td>
+                {% for service in services %}
+                <td>{{ summary|get_total:service }}</td>
+                {% endfor %}
+                <td>{{ earnings|get_total_earnings }} руб.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

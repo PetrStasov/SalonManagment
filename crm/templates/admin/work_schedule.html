@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Расписание сотрудников</title>
+    {% load static %}
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/locales-all.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style> 
+        #admin-button { 
+            margin-top: 20px; 
+            padding: 10px 20px; 
+            background-color: #3085d6; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        } 
+        #admin-button:hover { 
+            background-color: #2874a6; 
+        } 
+        .fc-event{ 
+            font-size: 2.2vw;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" id="personal-id" value="{{ personal_id }}" />
+    <div id='calendar-container'> 
+           <button id="admin-button">Назад</button></div>
+           <div id='calendar'></div> 
+
+    <script src="{% static 'admin/js/fullcalendar_init.js' %}"></script> </body>
+</html>

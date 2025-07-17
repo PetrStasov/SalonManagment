@@ -1,0 +1,17 @@
+{
+  "name": "salon-management",
+  "version": "1.0.0",
+  "description": "Management system for beauty salon",
+  "main": "index.js",
+  "dependencies": {
+    "@fullcalendar/core": "^5.0.0",
+    "@fullcalendar/daygrid": "^5.0.0",
+    "@fullcalendar/interaction": "^5.0.0",
+    "fullcalendar": "^6.1.15"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}
