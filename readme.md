@@ -40,32 +40,24 @@
 ## 🚀 Установка и запуск
 
 1. Клонируйте репозиторий:
-```bash
 git clone https://github.com/PetrStasov/SalonManagment.git
 cd SalonManagment
 
 2. Создайте и активируйте виртуальное окружение:
-
-bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
-Установите зависимости:
 
-bash
+Установите зависимости:
 pip install -r requirements.txt
 
 Примените миграции:
-
-bash
 python manage.py migrate
+
 Создайте суперпользователя:
-
-bash
 python manage.py createsuperuser
-Запустите сервер:
 
-bash
+Запустите сервер:
 python manage.py runserver
 
 
