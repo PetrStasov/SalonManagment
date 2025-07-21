@@ -1,8 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const adminButton = document.getElementById('admin-button'); 
-    adminButton.addEventListener('click', function() { 
-        window.location.href = '/crm/personal/';
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const adminButton = document.getElementById('admin-button');
+    if (adminButton) {
+        adminButton.addEventListener('click', function () {
+            window.location.href = '/admincrm/personal/';
+        });
+    }
 
     const personalIdElement = document.getElementById('personal-id');
     if (!personalIdElement) {
@@ -10,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     const personalId = personalIdElement.value;
-
     const url = `/crm/api/work_schedule/${personalId}/`;
 
     fetch(url)
@@ -21,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(events => {
+            // Локализация времени
+            moment.locale('ru'); // Установка русской локали
+
             // Преобразование времени событий в локальное время
             events = events.map(event => {
                 event.start = moment.utc(event.start).local().format();
@@ -32,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 editable: true,
+                firstDay: 1, // Начало недели с понедельника
+                locale: 'ru', // Установка русской локали
                 events: events,
                 timeZone: 'UTC',
                 eventContent: function(arg) {
