@@ -82,20 +82,6 @@ python manage.py runserver
 Настройка расписания работы.
 Финансовая отчетность.
 
-
-## Структура проекта
-myproject/
-├── crm/                 # Основная папка с логикой приложения
-│   ├── models.py        # Модели (Client, Service, Personal, Appointment, WorkSchedule)
-│   ├── views.py         # Логика обработки запросов
-│   ├── urls.py          # Роуты (API и интерфейсы)
-│   ├── forms.py         # Формы для валидации данных
-│   ├── templates/       # Шаблоны HTML
-│   └── static/          # Статические файлы (CSS, JS, изображения)
-├── manage.py            # Запуск сервера и команды Django
-├── requirements.txt     # Зависимости проекта
-└── README.md            # Это файл
-
 📊 Модели данных
 Основные сущности системы:
 
@@ -119,5 +105,35 @@ GET /api/available-time-slots/?specialist_id=<id>&date=<date>&service_id=<id> - 
 POST /api/book-appointment/ - создание записи
 
 POST /api/check-phone/ - проверка клиента по телефону
+
+## Структура проекта
+```plaintext
+myproject/
+├── crm/                  # Основное приложение
+│   ├── migrations/       # Миграции базы данных
+│   ├── templates/        # HTML-шаблоны
+│   │   ├── crm/          # Шаблоны приложения
+│   │   └── admin/        # Кастомные шаблоны админки
+│   ├── static/           # Статические файлы
+│   │   ├── css/          # Стили (main.css, modal.css)
+│   │   ├── js/           # JavaScript (api.js, main.js, modal.js)
+│   │   └── images/       # Изображения
+│   ├── __init__.py
+│   ├── admin.py          # Настройки админ-панели
+│   ├── apps.py           # Конфигурация приложения
+│   ├── forms.py          # Формы для валидации данных
+│   ├── models.py         # Модели данных
+│   ├── tests.py          # Тесты
+│   ├── urls.py           # Маршруты приложения
+│   └── views.py          # Обработчики запросов
+├── myproject/            # Настройки проекта
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py       # Основные настройки
+│   ├── urls.py           # Глобальные маршруты
+│   └── wsgi.py
+├── manage.py             # Утилита управления
+├── requirements.txt      # Зависимости
+└── README.md             # Документация
 
 
