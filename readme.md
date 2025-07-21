@@ -1,4 +1,4 @@
-# Система записи на услуги
+# Система управления косметическим кабинетом(для администратора) и запись на услуги(для клиента)
 
 ![Django](https://img.shields.io/badge/Django-3.2-green)
 ![Python](https://img.shields.io/badge/Python-3.8+-blue)
